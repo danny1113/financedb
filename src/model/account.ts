@@ -37,6 +37,8 @@ export const Account = {
     OtherExpense: 5500,
 } as const
 
+export type Account = typeof Account[keyof typeof Account]
+
 export function nameToAccount(name: string): Account | null {
     switch (name) {
         case "":
@@ -105,8 +107,6 @@ export function getAccountType(account: Account): AccountType {
     }
 }
 
-export type Account = typeof Account[keyof typeof Account]
-
 export const SubAccount = {
     Cash: 110001,
     PASMO: 110002,
@@ -130,6 +130,48 @@ export const SubAccount = {
 
 export type SubAccount = typeof SubAccount[keyof typeof SubAccount]
 
+export function nameToSubAccount(name: string): SubAccount {
+    switch (name) {
+        case "現金":
+            return SubAccount.Cash
+        case "PASMO":
+            return SubAccount.PASMO
+        case "Suica":
+            return SubAccount.Suica
+        case "モバイルSuica":
+            return SubAccount.MobileSuica
+        case "ANA Pay":
+            return SubAccount.ANAPay
+        case "PayPay":
+            return SubAccount.PayPay
+
+        case "ゆうちょ銀行":
+            return SubAccount.JPPostBank
+        case "永豐銀行":
+            return SubAccount.SinoPacBank
+
+        case "交通費":
+            return SubAccount.TravelExpense
+        case "食費":
+            return SubAccount.FoodExpense
+        case "日用雑貨":
+            return SubAccount.DailyExpense
+        case "医療費":
+            return SubAccount.HealthExpense
+        case "娯楽":
+            return SubAccount.EntertainmentExpense
+        case "私物品":
+            return SubAccount.PrivateExpense
+        case "公共料金":
+            return SubAccount.FeeExpense
+        case "その他":
+            return SubAccount.OtherExpense
+
+        default:
+            throw new Error("unknown account name: " + name)
+    }
+}
+
 export type AccountItem = {
     account: Account | null
     subAccount: SubAccount | null
@@ -139,5 +181,5 @@ export type AccountItem = {
 export type CurrentCash = {
     account: Account
     subAccount: SubAccount
-    value: number 
+    value: number
 }

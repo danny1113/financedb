@@ -28,9 +28,6 @@ async function insertTransaction(filename: string, year: number, month: number) 
     insertTransactions(store, transactions)
 
     const summary = getSummary(store, firstDay, lastDay)
-    // for (const e of summary) {
-    //     console.log(e)
-    // }
     insertNewIncomeStatement(store, firstDay, lastDay)
     insertNewBalanceSheet(store, summary, lastDay, prevDate)
 
@@ -68,3 +65,5 @@ function checkCurrentValue() {
 
 await insertOldHistory()
 checkCurrentValue()
+
+store.close()

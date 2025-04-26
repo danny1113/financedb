@@ -1,6 +1,6 @@
 import { parse } from "csv-parse/sync"
 import type { Transaction } from "../model/transaction";
-import { nameToAccount, type AccountItem } from "../model/account";
+import { nameToAccount, nameToSubAccount, type AccountItem } from "../model/account";
 import { ulid } from "ulid";
 
 export function parseTransactions(
@@ -14,20 +14,24 @@ export function parseTransactions(
     let transactions: Transaction[] = []
 
     for (const record of records) {
+        let t: Transaction
         switch (record.length) {
             case 6:
-                const t = parseTransactionRow(record)
-                transactions.push(t)
+                t = parseTransaction6Rows(record)
+                break
+            case 8:
+                t = parseTransaction8Rows(record)
                 break
             default:
                 throw new Error("wrong column count")
         }
+        transactions.push(t)
     }
 
     return transactions
 }
 
-function parseTransactionRow(record: string[]): Transaction {
+function parseTransaction6Rows(record: string[]): Transaction {
     const id = ulid()
     const date = formatDate(record[0]!)
     if (!date) {
@@ -46,7 +50,37 @@ function parseTransactionRow(record: string[]): Transaction {
         value: parseMoney(record[4]!),
     }
 
-    const note = record[5] ?? null
+    const note = parseNote(record[5])
+
+    return {
+        id,
+        date,
+        debit,
+        credit,
+        note,
+    }
+}
+
+function parseTransaction8Rows(record: string[]): Transaction {
+    const id = ulid()
+    const date = formatDate(record[0]!)
+    if (!date) {
+        throw new Error("bad date format")
+    }
+
+    const debit: AccountItem = {
+        account: nameToAccount(record[1]!),
+        subAccount: nameToSubAccount(record[2]!),
+        value: parseMoney(record[3]!),
+    }
+
+    const credit: AccountItem = {
+        account: nameToAccount(record[4]!),
+        subAccount: nameToSubAccount(record[5]!),
+        value: parseMoney(record[6]!),
+    }
+
+    const note = parseNote(record[7])
 
     return {
         id,
@@ -82,4 +116,11 @@ function parseMoney(money: string): number {
         .replace("¥", "")
         .replaceAll(",", "")
     return parseFloat(money)
+}
+
+function parseNote(note: string | undefined): string | null {
+    if (note === "") {
+        return null
+    }
+    return note ?? null
 }

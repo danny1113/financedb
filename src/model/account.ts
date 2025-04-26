@@ -130,8 +130,10 @@ export const SubAccount = {
 
 export type SubAccount = typeof SubAccount[keyof typeof SubAccount]
 
-export function nameToSubAccount(name: string): SubAccount {
+export function nameToSubAccount(name: string): SubAccount | null {
     switch (name) {
+        case "":
+            return null
         case "現金":
             return SubAccount.Cash
         case "PASMO":

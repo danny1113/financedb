@@ -11,9 +11,6 @@ export function insertNewBalanceSheet(
     const prevBalanceSheet = getBalanceSheet(store, prevDate)
     const balanceSheet = summaryToBalanceSheet(summary, date)
 
-    // console.log(prevBalanceSheet);
-    // console.log(balanceSheet);
-
     for (const curr of balanceSheet.entries) {
         for (const prev of prevBalanceSheet.entries) {
             if (curr.account === prev.account) {
@@ -33,10 +30,6 @@ export function insertNewBalanceSheet(
     //         balanceSheet.entries.push(prev)
     //     }
     // }
-
-    // console.log("after adjust");
-    // console.log(prevBalanceSheet);
-    // console.log(balanceSheet);
 
     // const merge = <T>(a: T[], b: T[], predicate = (a: T, b: T) => a === b) => {
     //     const c = [...a]; // copy to avoid side effects
@@ -99,7 +92,6 @@ export function summaryToBalanceSheet(
 ): BalanceSheet {
     const incomeStatement = summary
         .filter(e => {
-            // if (e.sum === 0) return false
             const type = getAccountType(e.accountId)
             return type === AccountType.Income || type === AccountType.Expense
         })
@@ -121,18 +113,11 @@ export function summaryToBalanceSheet(
 
     summary = summary
         .filter(e => {
-            // if (e.sum === 0) return false
             const type = getAccountType(e.accountId)
             return type !== AccountType.Income && type !== AccountType.Expense
         })
 
     let entries: Entry[] = summary
-        .filter(e => {
-            // if (e.sum === 0)
-                // console.log(e)
-            // return e.sum !== 0
-            return true
-        })
         .map(e => {
             return {
                 account: e.accountId,
@@ -161,8 +146,6 @@ export function summaryToBalanceSheet(
                 break
         }
     }
-
-    // console.log(left, right);
 
     if (left != right) {
         throw new Error("balance sheet is not balanced")

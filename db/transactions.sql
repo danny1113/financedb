@@ -8,4 +8,8 @@ SELECT
 FROM "Transaction"
 LEFT JOIN Account AS DebitAccount ON debitAccount = DebitAccount.id
 LEFT JOIN Account AS CreditAccount ON creditAccount = CreditAccount.id
-WHERE date >= "2025-04-01";
+WHERE "date" BETWEEN (
+    SELECT "start" FROM Edition
+) AND (
+    SELECT "end" FROM Edition
+);

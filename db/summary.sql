@@ -1,4 +1,16 @@
 -- 試算表
+WITH FilterTransaction AS (
+    SELECT
+        debitAccount, debitValue,
+        creditAccount, creditValue
+    FROM "Transaction"
+    WHERE "date" BETWEEN (
+        SELECT "start" FROM Edition
+    ) AND (
+        SELECT "end" FROM Edition
+    )
+)
+
 SELECT
     id,
     name,
@@ -8,22 +20,12 @@ SELECT
 FROM Account
 LEFT JOIN (
     SELECT debitAccount, SUM(debitValue) AS debitSum
-    FROM "Transaction"
-    WHERE "date" BETWEEN (
-        SELECT "start" FROM Edition
-    ) AND (
-        SELECT "end" FROM Edition
-    )
+    FROM FilterTransaction
     GROUP BY debitAccount
 ) ON Account.id = debitAccount
 LEFT JOIN (
     SELECT creditAccount, SUM(creditValue) AS creditSum
-    FROM "Transaction"
-    WHERE "date" BETWEEN (
-        SELECT "start" FROM Edition
-    ) AND (
-        SELECT "end" FROM Edition
-    )
+    FROM FilterTransaction
     GROUP BY creditAccount
 ) ON Account.id = creditAccount
 ORDER BY id;

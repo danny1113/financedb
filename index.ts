@@ -12,15 +12,23 @@ const store = new Database(db, {
     // bind values without prefixes
     strict: true,
 })
+store.run("PRAGMA foreign_keys = ON")
 
 function deleteTables(store: Database) {
-    store.run("PRAGMA foreign_keys = ON")
-    store.run("DELETE FROM 'Transaction'")
-    store.run("DELETE FROM FinancialStatementEntry")
-    store.run("DELETE FROM FinancialStatement")
+    const transaction = store.transaction(() => {
+        store.run("DELETE FROM 'Transaction'")
+        store.run("DELETE FROM FinancialStatementEntry")
+        store.run("DELETE FROM FinancialStatement")
+    })
+    transaction()
 }
 
-async function insertTransaction(store: Database, filename: string, year: number, month: number) {
+async function insertTransactionHistory(
+    store: Database,
+    filename: string,
+    year: number,
+    month: number,
+) {
     const file = Bun.file("./transactions/" + filename)
     const transactions = parseTransactions(await file.text())
 
@@ -58,9 +66,29 @@ async function insertOldHistory(store: Database) {
         for (const month of months) {
             const monthString = (month < 10) ? "0" + month.toString() : month.toString()
             const filename = year.toString() + "-" + monthString + ".csv"
-            await insertTransaction(store, filename, year, month)
+            await insertTransactionHistory(store, filename, year, month)
         }
     }
+}
+
+function insertNewTransaction(store: Database) {
+    const csv = `
+4/27	生活費	交通費	¥500	現金	PASMO	¥500	電車
+`
+    const transactions = parseTransactions(csv)
+    insertTransactions(store, transactions)
+
+    const year = 2025, month = 4
+    const firstDay = new Date(year, month - 1, 1).toLocaleDateString('sv-SE')
+    const lastDay = new Date(year, month, 0).toLocaleDateString('sv-SE')
+    const prevDate = new Date(year, month - 1, 0).toLocaleDateString('sv-SE')
+
+    const summary = getSummary(store, firstDay, lastDay)
+    insertNewIncomeStatement(store, firstDay, lastDay)
+    insertNewBalanceSheet(store, summary, lastDay, prevDate)
+
+    const cashFlow = makeCashFlowStatement(store, firstDay, lastDay)
+    insertCashFlowStatement(store, cashFlow)
 }
 
 function checkCurrentValue(store: Database) {
@@ -83,4 +111,5 @@ deleteTables(store)
 await insertOldHistory(store)
 checkCurrentValue(store)
 
+store.run("PRAGMA wal_checkpoint(TRUNCATE)")
 store.close()

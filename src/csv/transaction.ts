@@ -9,24 +9,19 @@ export function parseTransactions(
     const records = parse(csv, {
         delimiter: "\t",
         skip_empty_lines: true,
-    })
+    }) as string[][]
 
-    let transactions: Transaction[] = []
-
-    for (const record of records) {
-        let t: Transaction
-        switch (record.length) {
-            case 6:
-                t = parseTransaction6Rows(record)
-                break
-            case 8:
-                t = parseTransaction8Rows(record)
-                break
-            default:
-                throw new Error("wrong column count")
-        }
-        transactions.push(t)
-    }
+    const transactions: Transaction[] = records
+        .map((record: string[]) => {
+            switch (record.length) {
+                case 6:
+                    return parseTransaction6Rows(record)
+                case 8:
+                    return parseTransaction8Rows(record)
+                default:
+                    throw new Error("wrong column count")
+            }
+        })
 
     return transactions
 }

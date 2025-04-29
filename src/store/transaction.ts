@@ -17,7 +17,7 @@ SELECT
     creditValue,
     note
 FROM \`Transaction\`
-WHERE "date" BETWEEN $startDate AND $endDate`
+WHERE date BETWEEN $startDate AND $endDate`
     const query = store.query<{
         id: string
         date: string

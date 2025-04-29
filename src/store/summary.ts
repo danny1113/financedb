@@ -16,13 +16,13 @@ FROM Account
 LEFT JOIN (
     SELECT debitAccount, SUM(debitValue) AS debitSum
     FROM \`Transaction\`
-    WHERE "date" BETWEEN $startDate AND $endDate
+    WHERE date BETWEEN $startDate AND $endDate
     GROUP BY debitAccount
 ) ON Account.id = debitAccount
 LEFT JOIN (
     SELECT creditAccount, SUM(creditValue) AS creditSum
     FROM \`Transaction\`
-    WHERE "date" BETWEEN $startDate AND $endDate
+    WHERE date BETWEEN $startDate AND $endDate
     GROUP BY creditAccount
 ) ON Account.id = creditAccount
 ORDER BY id

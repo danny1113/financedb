@@ -2,6 +2,7 @@ import { Database } from "bun:sqlite"
 import type { CashFlowStatement } from "../model/cashflowstatement"
 import { financialStatementId, FinancialStatementType, type Entry } from "../model/financialstatement"
 import { insertNewFinancialStatement, updateFinancialStatementEntry } from "./finiancialstatement"
+import { Account } from "../model/account"
 
 export function makeCashFlowStatement(
     store: Database,
@@ -40,7 +41,15 @@ GROUP BY account
         endDate: string,
     }>(sql)
     const entries = stmt.all({ startDate, endDate })
-
+        .filter(e => {
+            switch (e.account) {
+                case Account.Cash:
+                case Account.CashAtBank:
+                    return false
+                default:
+                    return true
+            }
+        })
     return {
         startDate,
         endDate,

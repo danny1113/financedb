@@ -12,7 +12,7 @@ VALUES
 (2140, 'Account Payable'),
 (2170, 'Expense Payable'),
 
-(3100, "Owner's Capital"),
+(3100, 'Owner''s Capital'),
 (3110, 'Capital Stock'),
 (3351, 'Retained Earnings'),
 

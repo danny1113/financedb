@@ -7,7 +7,7 @@ SELECT
 FROM FinancialStatementEntry
 INNER JOIN Account
     ON Account.id = accountId
-WHERE financialStatementId LIKE "BS-2025-04-__";
+WHERE financialStatementId LIKE 'BS-2025-04-__';
 
 -- income statement
 SELECT

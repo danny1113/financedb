@@ -15,17 +15,18 @@ SELECT
 FROM Account
 LEFT JOIN (
     SELECT debitAccount, SUM(debitValue) AS debitSum
-    FROM "Transaction"
+    FROM \`Transaction\`
     WHERE "date" BETWEEN $startDate AND $endDate
     GROUP BY debitAccount
 ) ON Account.id = debitAccount
 LEFT JOIN (
     SELECT creditAccount, SUM(creditValue) AS creditSum
-    FROM "Transaction"
+    FROM \`Transaction\`
     WHERE "date" BETWEEN $startDate AND $endDate
     GROUP BY creditAccount
 ) ON Account.id = creditAccount
-ORDER BY id;`
+ORDER BY id
+`
 
     const query = store.query<Summary, {
         startDate: string

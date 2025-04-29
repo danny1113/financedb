@@ -7,7 +7,7 @@ export function getTransactions(
 ): Transaction[] {
     const sql = `
 SELECT
-    "Transaction".id,
+    id,
     date,
     debitAccount,
     debitSubAccount,
@@ -16,7 +16,7 @@ SELECT
     creditSubAccount,
     creditValue,
     note
-FROM "Transaction"
+FROM \`Transaction\`
 WHERE "date" BETWEEN $startDate AND $endDate`
     const query = store.query<{
         id: string
@@ -63,7 +63,7 @@ WHERE "date" BETWEEN $startDate AND $endDate`
 
 export function insertTransactions(store: Database, transactions: Transaction[]) {
     const sql = `
-INSERT INTO "Transaction"
+INSERT INTO \`Transaction\`
 VALUES
 ($id, $date, $debitAccount, $debitSubAccount, $debitValue, $creditAccount, $creditSubAccount, $creditValue, $note)    
 `

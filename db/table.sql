@@ -9,7 +9,7 @@ CREATE TABLE SubAccount (
     'name'      TEXT NOT NULL
 ) STRICT;
 
-CREATE TABLE "Transaction" (
+CREATE TABLE `Transaction` (
     'id'                TEXT PRIMARY KEY,
     'date'              TEXT NOT NULL,
     'debitAccount'      INT REFERENCES Account(id) ON UPDATE CASCADE,

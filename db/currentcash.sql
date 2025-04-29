@@ -10,21 +10,21 @@ FROM Account
 LEFT JOIN SubAccount ON Account.id = SubAccount.accountId
 LEFT JOIN (
     SELECT id AS debitId, debitSubAccount, SUM(debitValue) AS debitSum
-    FROM "Transaction"
-    WHERE "date" BETWEEN (
-        SELECT "start" FROM Edition
+    FROM `Transaction`
+    WHERE `date` BETWEEN (
+        SELECT `start` FROM Edition
     ) AND (
-        SELECT "end" FROM Edition
+        SELECT `end` FROM Edition
     )
     GROUP BY debitSubAccount
 ) ON SubAccount.id = debitSubAccount
 LEFT JOIN (
     SELECT id AS creditId, creditSubAccount, SUM(creditValue) AS creditSum
-    FROM "Transaction"
-    WHERE "date" BETWEEN (
-        SELECT "start" FROM Edition
+    FROM `Transaction`
+    WHERE `date` BETWEEN (
+        SELECT `start` FROM Edition
     ) AND (
-        SELECT "end" FROM Edition
+        SELECT `end` FROM Edition
     )
     GROUP BY creditSubAccount
 ) ON SubAccount.id = creditSubAccount
@@ -43,12 +43,12 @@ FROM Account
 LEFT JOIN SubAccount ON Account.id = SubAccount.accountId
 LEFT JOIN (
     SELECT id AS debitId, debitSubAccount, SUM(debitValue) AS debitSum
-    FROM "Transaction"
+    FROM `Transaction`
     GROUP BY debitSubAccount
 ) ON SubAccount.id = debitSubAccount
 LEFT JOIN (
     SELECT id AS creditId, creditSubAccount, SUM(creditValue) AS creditSum
-    FROM "Transaction"
+    FROM `Transaction`
     GROUP BY creditSubAccount
 ) ON SubAccount.id = creditSubAccount
 WHERE Account.id = 1100 OR Account.id = 1103

@@ -14,22 +14,22 @@ SELECT
     SUM(value) AS value
 FROM (
     SELECT
-        "Transaction".id,
+        id,
         creditAccount AS account,
         debitValue AS value,
         note
-    FROM "Transaction"
+    FROM \`Transaction\`
     WHERE date BETWEEN $startDate AND $endDate
         AND debitAccount <= 1103
 
     UNION
 
     SELECT
-        "Transaction".id,
+        id,
         debitAccount AS account,
         -creditValue AS value,
         note
-    FROM "Transaction"
+    FROM \`Transaction\`
     WHERE date BETWEEN $startDate AND $endDate
         AND creditAccount <= 1103
 )

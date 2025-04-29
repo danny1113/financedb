@@ -1,7 +1,7 @@
 SELECT
     Account.id as account,
     Account.name,
-    SubAccount.id AS 'sub account',
+    SubAccount.id AS `subAccount`,
     SubAccount.name
 FROM
     Account

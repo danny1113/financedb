@@ -4,11 +4,11 @@ WITH FilterTransaction AS (
         id,
         debitAccount, debitValue,
         creditAccount, creditValue
-    FROM "Transaction"
-    WHERE "date" BETWEEN (
-        SELECT "start" FROM Edition
+    FROM `Transaction`
+    WHERE `date` BETWEEN (
+        SELECT `start` FROM Edition
     ) AND (
-        SELECT "end" FROM Edition
+        SELECT `end` FROM Edition
     )
 )
 

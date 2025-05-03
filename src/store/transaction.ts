@@ -64,8 +64,10 @@ WHERE date BETWEEN $startDate AND $endDate`
 export function insertTransactions(store: Database, transactions: Transaction[]) {
     const sql = `
 INSERT INTO \`Transaction\`
-VALUES
-($id, $date, $debitAccount, $debitSubAccount, $debitValue, $creditAccount, $creditSubAccount, $creditValue, $note)    
+VALUES ($id, $date,
+$debitAccount, $debitSubAccount, $debitValue,
+$creditAccount, $creditSubAccount, $creditValue,
+$note)
 `
 
     const stmt = store.prepare(sql)

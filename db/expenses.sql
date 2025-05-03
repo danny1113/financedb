@@ -8,7 +8,9 @@ WITH Expenses AS (
     FROM `Transaction`
     LEFT JOIN Account AS DebitAccount ON debitAccount = DebitAccount.id
     LEFT JOIN SubAccount AS DebitSubAccount ON debitSubAccount = DebitSubAccount.id
-    WHERE date >= '2025-04-01' AND debitAccount >= 5000
+    WHERE date >= (
+        SELECT start FROM Edition
+    ) AND debitAccount >= 5000
     GROUP BY debitAccount, debitSubAccount
     ORDER BY debitAccount
 )

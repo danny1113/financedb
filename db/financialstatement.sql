@@ -7,7 +7,7 @@ SELECT
 FROM FinancialStatementEntry
 INNER JOIN Account
     ON Account.id = accountId
-WHERE financialStatementId LIKE 'BS-2025-04-__';
+WHERE financialStatementId LIKE 'BS-2025-05-__';
 
 -- income statement
 SELECT
@@ -17,7 +17,7 @@ SELECT
 FROM FinancialStatementEntry
 INNER JOIN Account
     ON Account.id = accountId
-WHERE financialStatementId LIKE 'IS-2025-04-__';
+WHERE financialStatementId LIKE 'IS-2025-05-__';
 
 -- cash flow statement
 SELECT
@@ -27,4 +27,4 @@ SELECT
 FROM FinancialStatementEntry
 INNER JOIN Account
     ON Account.id = accountId
-WHERE financialStatementId LIKE 'CF-2025-04-__';
+WHERE financialStatementId LIKE 'CF-2025-05-__';

@@ -60,7 +60,7 @@ async function insertTransactionHistory(
 
 async function insertOldHistory(store: Database) {
     const years = [
-        { year: 2025, months: [1, 2, 3, 4] },
+        { year: 2025, months: [1, 2, 3, 4, 5] },
     ]
     for (const { year, months } of years) {
         for (const month of months) {
@@ -98,7 +98,7 @@ function checkCurrentValue(store: Database) {
 }
 
 function makeCashFlow(store: Database) {
-    const cashFlow = makeCashFlowStatement(store, "2025-04-01", "2025-04-30")
+    const cashFlow = makeCashFlowStatement(store, "2025-05-01", "2025-05-31")
     let total = 0
     for (const e of cashFlow.entries) {
         total += e.value
